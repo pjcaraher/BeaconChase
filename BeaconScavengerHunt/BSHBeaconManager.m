@@ -209,9 +209,9 @@ monitoringDidFailForRegion:(CLRegion *)region
     NSUUID *proximityUUID = [[NSUUID alloc] initWithUUIDString:self.uuid];
     CLBeaconRegion *region = [[CLBeaconRegion alloc] initWithProximityUUID:proximityUUID identifier:kBeaconIdentifier];
 
-    region.notifyOnEntry = YES;
-    region.notifyOnExit = YES;
-    region.notifyEntryStateOnDisplay = YES;
+//    region.notifyOnEntry = YES;
+//    region.notifyOnExit = YES;
+//    region.notifyEntryStateOnDisplay = YES;
 
     if ([[UIApplication sharedApplication] backgroundRefreshStatus] == UIBackgroundRefreshStatusAvailable) {
         
@@ -226,20 +226,21 @@ monitoringDidFailForRegion:(CLRegion *)region
 
     NSLog(@"Authorization Status is %d", [CLLocationManager authorizationStatus]);
 
-    // If the authorization status has yet to be determined or, if it is set to only
-    // when in use, request Always in order to allow for Monitoring.
-    if ((kCLAuthorizationStatusNotDetermined == [CLLocationManager authorizationStatus]) && [self.locationManager respondsToSelector:@selector(requestAlwaysAuthorization)])
+    // If the authorization status has yet to be determined request When In Use in order to allow for Monitoring.
+    if ((kCLAuthorizationStatusNotDetermined == [CLLocationManager authorizationStatus]) && [self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)])
     {
-        [self.locationManager requestAlwaysAuthorization];
-        //        [self.locationManager requestWhenInUseAuthorization];
+        [self.locationManager requestWhenInUseAuthorization];
+        //        [self.locationManager requestAlwaysAuthorization];
     }
     else
     {
-        BOOL available = [CLLocationManager isMonitoringAvailableForClass:[CLBeaconRegion class]];
+//        BOOL available = [CLLocationManager isMonitoringAvailableForClass:[CLBeaconRegion class]];
+        BOOL available = YES;
         
         if (available)
         {
-            [self.locationManager startMonitoringForRegion:region];
+//            [self.locationManager startMonitoringForRegion:region];
+            [self.locationManager startRangingBeaconsInRegion:region];
         }
         else
         {
